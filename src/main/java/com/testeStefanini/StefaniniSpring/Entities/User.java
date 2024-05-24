@@ -1,4 +1,4 @@
-package com.testeStefanini.StefaniniSpring;
+package com.testeStefanini.StefaniniSpring.Entities;
 
 import java.io.Serializable;
 

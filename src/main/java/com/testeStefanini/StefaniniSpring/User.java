@@ -2,9 +2,18 @@ package com.testeStefanini.StefaniniSpring;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Entity;//usamos esse pois é sempre melhor a classe depender da especificação
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity //isso demonstra que essa classe é uma entidade de um banco de dado, isso pertime converter a entidade para um modelo relacional
+@Table(name ="tb_user")// renomeando o nome da tabela da classe pois User é palavra reservada no banco de dados
 public class User implements Serializable {
     private static final long serialVersionUID = 1L; //Numero do Serializable
 
+    @Id//Chave primaria
+    @GeneratedValue//como é uma chave numeria essa anotatio serve para demonstrar para o banco de dados que essa variavel é auto incrementavel
     private Long id;
     private String name;
     private String email;

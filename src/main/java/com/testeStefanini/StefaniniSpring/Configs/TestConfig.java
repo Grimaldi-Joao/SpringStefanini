@@ -1,4 +1,4 @@
-package com.testeStefanini.StefaniniSpring;
+package com.testeStefanini.StefaniniSpring.Configs;
 
 import java.util.Arrays;
 
@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+
+import com.testeStefanini.StefaniniSpring.Entities.User;
+import com.testeStefanini.StefaniniSpring.Repository.UserRepository;
 
 @Configuration // isso demonstra que é uma classe de configuração
 @Profile("test") // isso aponta que essa classe é uma configuração especifica para teste

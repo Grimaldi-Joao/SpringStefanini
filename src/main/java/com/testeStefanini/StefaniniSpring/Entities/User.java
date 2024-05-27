@@ -1,9 +1,12 @@
 package com.testeStefanini.StefaniniSpring.Entities;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.ArrayList;
 
 import jakarta.persistence.Entity;//usamos esse pois é sempre melhor a classe depender da especificação
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -13,12 +16,14 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L; //Numero do Serializable
 
     @Id//Chave primaria
-    @GeneratedValue//como é uma chave numeria essa anotatio serve para demonstrar para o banco de dados que essa variavel é auto incrementavel
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//como é uma chave numeria essa anotatio serve para demonstrar para o banco de dados que essa variavel é auto incrementavel
     private Long id;
     private String name;
     private String email;
     private String phone;
     private String password;
+
+    private List<Order> orders = new ArrayList<>();
 
     public User(Long id,String name, String email, String phone, String password){
         super();

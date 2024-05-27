@@ -36,6 +36,10 @@ public class User implements Serializable {
 
     public User(){}//Por padrão
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
     public String getEmail() {
         return email;
     }

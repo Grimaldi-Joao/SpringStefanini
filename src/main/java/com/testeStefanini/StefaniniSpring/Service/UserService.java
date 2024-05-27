@@ -1,7 +1,7 @@
 package com.testeStefanini.StefaniniSpring.Service;
 
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +18,9 @@ public class UserService {
         return repository.findAll();
     }
 
+    public User findById(Long Id){
+        Optional<User> Obj = repository.findById(Id);
+        return Obj.get();
+    }
 
 }

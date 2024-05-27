@@ -29,7 +29,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public User(){}
+    public User(){}//Por padrão
 
     public String getEmail() {
         return email;

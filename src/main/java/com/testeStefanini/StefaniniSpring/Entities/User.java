@@ -2,6 +2,9 @@ package com.testeStefanini.StefaniniSpring.Entities;
 
 import java.io.Serializable;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 
 import jakarta.persistence.Entity;//usamos esse pois é sempre melhor a classe depender da especificação
@@ -23,6 +26,10 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private String password;
+
+    @JsonIgnore//Na hora da compilação ele ignora essa parte, ele aqui foi utilizado para parar um Loop que tinha na iteração de User com Order
+                //complementando a ideia de cima, quando se faz uma associação de 1 para muitos voce tem que ussar essa anotatio, pois senão da erro de memoria já que vai está e loop
+
 
     @OneToMany(mappedBy = "client")//fazendo o outro lado da relação, mostrando que a relação de user com order é de 1 para varias
     private List<Order> orders = new ArrayList<>();

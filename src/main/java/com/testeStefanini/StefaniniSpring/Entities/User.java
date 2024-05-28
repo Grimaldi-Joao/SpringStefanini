@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;//usamos esse pois é sempre melhor a classe d
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity //isso demonstra que essa classe é uma entidade de um banco de dado, isso pertime converter a entidade para um modelo relacional
@@ -23,6 +24,7 @@ public class User implements Serializable {
     private String phone;
     private String password;
 
+    @OneToMany(mappedBy = "client")//fazendo o outro lado da relação, mostrando que a relação de user com order é de 1 para varias
     private List<Order> orders = new ArrayList<>();
 
     public User(Long id,String name, String email, String phone, String password){

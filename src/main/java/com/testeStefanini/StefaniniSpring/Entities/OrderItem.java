@@ -2,8 +2,10 @@ package com.testeStefanini.StefaniniSpring.Entities;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.testeStefanini.StefaniniSpring.Entities.PK.OrderItemPK;
 
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -12,7 +14,8 @@ import jakarta.persistence.Table;
 public class OrderItem implements Serializable{
     private static final long serialVersionUID = 1L;
 
-    private OrderItemPK id;
+    @EmbeddedId//como nosso id é composto nos usamos essa anotation
+    private OrderItemPK id = new OrderItemPK();
 
     private Integer quantity;
     private Double price;
@@ -27,6 +30,7 @@ public class OrderItem implements Serializable{
         this.price = price;
     }
 
+    @JsonIgnore//para evitar a associação de mão dupla
     public Order getOrder(){// nos fazemos isso para essa classer ter acesso a classe pk
         return id.getOrder();
     }

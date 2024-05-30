@@ -1,6 +1,8 @@
 package com.testeStefanini.StefaniniSpring.Entities;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 //import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -33,6 +36,9 @@ public class Order implements Serializable{
     @ManyToOne//Anotation que serve para mostrar que a variavel cliente é uma chave de fora e alem disso mostrar que a relação é de varios pedidos para 1
     @JoinColumn(name = "client_id")//criar uma coluna com o nome desiguinado
     private User client;
+
+    @OneToMany(mappedBy = "id.order")// pois no OrderItem quem tem acesso aos pedidos é o id
+    private Set<OrderItem> items = new HashSet<>();
 
     public Order(){
     }
@@ -57,6 +63,10 @@ public class Order implements Serializable{
 
     public User getClient() {
         return client;
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
     }
 
     public void setId(Long id) {
@@ -90,7 +100,7 @@ public class Order implements Serializable{
             return false;
         if(getClass() != obj.getClass())
             return false;
-        User other = (User) obj;
+        Order other = (Order) obj;
         if (id == null) {
             if(other.getId() != null)
                 return false;

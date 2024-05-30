@@ -98,7 +98,7 @@ public class Product implements Serializable {
             return false;
         if(getClass() != obj.getClass())
             return false;
-        User other = (User) obj;
+        Product other = (Product) obj;
         if (id == null) {
             if(other.getId() != null)
                 return false;

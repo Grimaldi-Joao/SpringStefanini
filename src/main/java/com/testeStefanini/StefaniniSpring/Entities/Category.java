@@ -68,7 +68,7 @@ public class Category implements Serializable {
             return false;
         if(getClass() != obj.getClass())
             return false;
-        User other = (User) obj;
+        Category other = (Category) obj;
         if (id == null) {
             if(other.getId() != null)
                 return false;

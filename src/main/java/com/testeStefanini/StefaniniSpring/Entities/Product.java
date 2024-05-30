@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 //import jakarta.persistence.Transient;
 
@@ -26,6 +30,10 @@ public class Product implements Serializable {
     private String imgUrl;
 
     //@Transient essa anotation faz com que o jpa não tente rodar oq vc queira
+    @ManyToMany
+    @JoinTable(name = "tb_product_category", //nome da tabela de associação 
+    joinColumns = @JoinColumn(name = "product_id"),//define a chave estrangeira que está recebendo
+    inverseJoinColumns = @JoinColumn(name = "category_id"))// aqui vc está especificando a rela ção de muitos para muitos de Product com category, e esse invertido define a chave estrangeira do outro lado da relação
     private Set<Category> categories = new HashSet<>();
 
     public Product(){}

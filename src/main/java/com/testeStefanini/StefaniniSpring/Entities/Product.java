@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 //import jakarta.persistence.Transient;
 
@@ -35,6 +37,9 @@ public class Product implements Serializable {
     joinColumns = @JoinColumn(name = "product_id"),//define a chave estrangeira que está recebendo
     inverseJoinColumns = @JoinColumn(name = "category_id"))// aqui vc está especificando a rela ção de muitos para muitos de Product com category, e esse invertido define a chave estrangeira do outro lado da relação
     private Set<Category> categories = new HashSet<>();
+
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Product(){}
 
@@ -61,6 +66,15 @@ public class Product implements Serializable {
     }
     public String getImgUrl() {
         return imgUrl;
+    }
+
+    @JsonIgnore
+    public Set<Order> getOrders() {// esse get é a forma de chegar no order pela classe product, criamos uma lista de OrderItens, e esse get a percorre passando por todos os elementos dela e pegando os seus respectivos order
+        Set<Order> set = new HashSet<>();
+        for (OrderItem x : items) {
+            set.add(x.getOrder());
+        }
+        return set;
     }
 
     public void setId(Long id) {

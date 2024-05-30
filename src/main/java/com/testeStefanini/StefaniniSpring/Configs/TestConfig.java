@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import com.testeStefanini.StefaniniSpring.Entities.Category;
 import com.testeStefanini.StefaniniSpring.Entities.Order;
 import com.testeStefanini.StefaniniSpring.Entities.OrderItem;
+import com.testeStefanini.StefaniniSpring.Entities.Payment;
 import com.testeStefanini.StefaniniSpring.Entities.Product;
 import com.testeStefanini.StefaniniSpring.Entities.User;
 import com.testeStefanini.StefaniniSpring.Entities.Enum.OrderStatus;
@@ -80,6 +81,11 @@ public class TestConfig implements CommandLineRunner {// essa classe serve para 
         OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
         
         orderItemRepository.saveAll(Arrays.asList(oi1,oi2,oi3,oi4));
+
+        Payment pay1 = new Payment(null, Instant.parse("2019-06-20T21:53:07Z"), o1);
+		o1.setPayment(pay1);//como é uma relação um para 1 e um deles é dependente voce não usa o repositorio dele pois não a nescessidade
+
+		orderRepository.save(o1);
     }
 
 }

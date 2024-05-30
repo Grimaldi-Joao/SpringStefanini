@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 //import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.testeStefanini.StefaniniSpring.Entities.Enum.OrderStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 
@@ -39,6 +41,9 @@ public class Order implements Serializable{
 
     @OneToMany(mappedBy = "id.order")// pois no OrderItem quem tem acesso aos pedidos é o id
     private Set<OrderItem> items = new HashSet<>();
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)//classe independente vc está mapeando pegando a variavel order do outro lado
+    private Payment payment;                                //cascade all vc está mapeando o codigo para ter o mesmo id
 
     public Order(){
     }
@@ -68,6 +73,9 @@ public class Order implements Serializable{
     public Set<OrderItem> getItems() {
         return items;
     }
+    public Payment getPayment() {
+        return payment;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -83,6 +91,10 @@ public class Order implements Serializable{
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public int hashCode(){

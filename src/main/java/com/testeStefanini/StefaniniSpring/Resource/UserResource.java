@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,7 +51,18 @@ public class UserResource {// recursos da classe User
 		return ResponseEntity.created(uri).body(obj);//nos usamos create para retornar 201, é mais apropriado para essa situação
         //o criate pode um objeto do tipo URI
 	}
+
+    @DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {//path sever para reconhecer o caminho
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
     
+    @PutMapping(value = "/{id}")
+	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj) {//como aqui vc prescisa reconhecer o Id e mexer com os atributos internos do usuario vc usa essas duas anotations
+		obj = service.update(id, obj);
+		return ResponseEntity.ok().body(obj);
+	}
 }
 
 

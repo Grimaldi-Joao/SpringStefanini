@@ -26,6 +26,7 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private String password;
+    private int valid = 0;
 
     @JsonIgnore//Na hora da compilação ele ignora essa parte, ele aqui foi utilizado para parar um Loop que tinha na iteração de User com Order
                 //complementando a ideia de cima, quando se faz uma associação de 1 para muitos voce tem que ussar essa anotatio, pois senão da erro de memoria já que vai está e loop
@@ -63,6 +64,10 @@ public class User implements Serializable {
     }public String getPhone() {
         return phone;
     }
+    
+    public int getValid() {
+        return valid;
+    }
     public void setEmail(String email) {
         this.email = email;
     }
@@ -77,6 +82,10 @@ public class User implements Serializable {
     }
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void setValid(int valid) {
+        this.valid = valid;
     }
 
     public int hashCode(){

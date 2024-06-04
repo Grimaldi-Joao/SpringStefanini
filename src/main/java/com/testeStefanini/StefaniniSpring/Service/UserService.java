@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.testeStefanini.StefaniniSpring.Entities.User;
 import com.testeStefanini.StefaniniSpring.Repository.UserRepository;
+import com.testeStefanini.StefaniniSpring.Service.exceptions.CreateNewUserException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.DatabaseException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.ResourceNotFoundException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.ValidationException;
@@ -31,6 +32,7 @@ public class UserService {
 	}
 
     public User insert(User obj) {//inseriri um novo objeto do tipo user
+		checkEmail(obj);
 		return repository.save(obj);
 	}
 
@@ -74,5 +76,14 @@ public class UserService {
         if (user.getPhone() == null || user.getPhone().isEmpty()) {
             throw new ValidationException("Phone number is required");
         }
+	}
+
+	private void checkEmail(User user){
+		List<User> allUsers = findAll();
+		for (User exstUsers : allUsers) {
+			if (exstUsers.getEmail().equals(user.getEmail())) {
+				throw new CreateNewUserException("Email is being used");
+			}
+		}
 	}
 }

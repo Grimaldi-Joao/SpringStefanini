@@ -11,6 +11,7 @@ import com.testeStefanini.StefaniniSpring.Entities.User;
 import com.testeStefanini.StefaniniSpring.Repository.UserRepository;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.DatabaseException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.ResourceNotFoundException;
+import com.testeStefanini.StefaniniSpring.Service.exceptions.ValidationException;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -52,6 +53,7 @@ public class UserService {
     public User update(Long id, User obj) {
 		try {
 			User entity = repository.getReferenceById(id);
+			validUser(obj);
 			updateData(entity, obj);
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {
@@ -63,7 +65,14 @@ public class UserService {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
 		entity.setPhone(obj.getPhone());
-        entity.setValid(obj.getValid() +1);//vai mostrar quantas vezes ele atualizou o usuario
 	}
 
+	private void validUser(User user){
+        if (user.getEmail() == null || user.getEmail().isEmpty()) {
+            throw new ValidationException("Email is required");
+        }
+        if (user.getPhone() == null || user.getPhone().isEmpty()) {
+            throw new ValidationException("Phone number is required");
+        }
+	}
 }

@@ -63,6 +63,7 @@ public class UserResource {// recursos da classe User
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
+
 }
 
 

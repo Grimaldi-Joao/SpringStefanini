@@ -33,6 +33,7 @@ public class UserService {
 
     public User insert(User obj) {//inseriri um novo objeto do tipo user
 		checkEmail(obj);
+		obj.setPassword(CryptoService.encryptPassword(obj.getPassword()));
 		return repository.save(obj);
 	}
 

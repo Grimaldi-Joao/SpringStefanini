@@ -11,6 +11,7 @@ import com.testeStefanini.StefaniniSpring.Entities.User;
 import com.testeStefanini.StefaniniSpring.Repository.UserRepository;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.CreateNewUserException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.DatabaseException;
+import com.testeStefanini.StefaniniSpring.Service.exceptions.PasswordException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.ResourceNotFoundException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.ValidationException;
 
@@ -33,6 +34,7 @@ public class UserService {
 
     public User insert(User obj) {//inseriri um novo objeto do tipo user
 		checkEmail(obj);
+		checkPas(obj);
 		obj.setPassword(CryptoService.encryptPassword(obj.getPassword()));
 		return repository.save(obj);
 	}
@@ -85,6 +87,12 @@ public class UserService {
 			if (exstUsers.getEmail().equals(user.getEmail())) {
 				throw new CreateNewUserException("Email is being used");
 			}
+		}
+	}
+
+	private void checkPas(User user){
+		if (user.getPassword().length() <= 8) {
+			throw new PasswordException("Password is invalid");
 		}
 	}
 }

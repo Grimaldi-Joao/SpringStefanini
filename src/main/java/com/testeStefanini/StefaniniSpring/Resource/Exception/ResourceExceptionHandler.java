@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import com.testeStefanini.StefaniniSpring.Service.exceptions.CreateNewUserException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.DatabaseException;
+import com.testeStefanini.StefaniniSpring.Service.exceptions.PasswordException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.ResourceNotFoundException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.ValidationException;
 
@@ -42,6 +43,14 @@ public class ResourceExceptionHandler {
 	@ExceptionHandler(CreateNewUserException.class)
 	public ResponseEntity<StandardError> newUser(CreateNewUserException e, HttpServletRequest request){
 		String error = "New user error";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+
+	@ExceptionHandler(PasswordException.class)
+	public ResponseEntity<StandardError> creatPass(PasswordException e, HttpServletRequest request){
+		String error = "The password doesn't 8 or more characters long";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);

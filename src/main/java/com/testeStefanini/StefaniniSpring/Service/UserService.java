@@ -23,6 +23,9 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
+	@Autowired
+	private CryptoService cryptoService;
+
     public List<User> findAll(){
         return repository.findAll();
     }
@@ -94,5 +97,14 @@ public class UserService {
 		if (user.getPassword().length() <= 8) {
 			throw new PasswordException("Password is invalid");
 		}
+	}
+
+	public boolean login(String email, String senha){
+		User user = repository.findByEmail(email);
+
+		if (user == null) {
+			return false;
+		}
+		return cryptoService.matches(senha,user.getPassword());
 	}
 }

@@ -64,6 +64,16 @@ public class UserResource {// recursos da classe User
 		return ResponseEntity.ok().body(obj);
 	}
 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User user) {
+        boolean success = service.login(user.getEmail(), user.getPassword());
+        if (success) {
+            return ResponseEntity.ok("Login successful");
+        } else {
+            return ResponseEntity.status(401).body("Invalid credentials");
+        }
+
+    }
 }
 
 

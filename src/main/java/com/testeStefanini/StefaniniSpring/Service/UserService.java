@@ -95,7 +95,7 @@ public class UserService {
 				throw new CreateNewUserException("Email is being used");  função menos eficiente
 			}
 		}*/
-		if(repository.existsByEmail(user.getEmail()) != true){
+		if(repository.existsByEmail(user.getEmail()) != false){
 			throw new CreateNewUserException("Email is being used");
 		}
 		Pattern pattern = Pattern.compile(EMAIL_REGEX);

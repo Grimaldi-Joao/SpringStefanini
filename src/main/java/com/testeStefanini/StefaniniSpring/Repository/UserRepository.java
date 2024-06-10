@@ -7,4 +7,6 @@ import com.testeStefanini.StefaniniSpring.Entities.User;
 public interface UserRepository extends JpaRepository<User, Long> { // repositorios sempre seram interfaçe
 
     public User findByEmail(String email);
+
+    public boolean existsByEmail(String email);
 }

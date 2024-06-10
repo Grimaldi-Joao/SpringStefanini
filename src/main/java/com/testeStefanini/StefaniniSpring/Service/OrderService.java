@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.testeStefanini.StefaniniSpring.DTO.OrderDTO;
 import com.testeStefanini.StefaniniSpring.Entities.Order;
 import com.testeStefanini.StefaniniSpring.Repository.OrderRepository;
 
@@ -21,6 +22,16 @@ public class OrderService {
     public Order findById(Long Id){
         Optional<Order> Obj = repository.findById(Id);
         return Obj.get();
+    }
+
+    public List<OrderDTO> findAllDTO() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAllDTO'");
+    }
+
+    public OrderDTO findByIdDTO(Long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByIdDTO'");
     }
 
 }

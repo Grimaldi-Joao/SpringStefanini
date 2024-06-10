@@ -2,6 +2,9 @@ package com.testeStefanini.StefaniniSpring.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -25,6 +28,8 @@ public class UserService {
 
 	@Autowired
 	private CryptoService cryptoService;
+
+	private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,63}$";
 
     public List<User> findAll(){
         return repository.findAll();
@@ -85,11 +90,18 @@ public class UserService {
 	}
 
 	private void checkEmail(User user){
-		List<User> allUsers = findAll();
-		for (User exstUsers : allUsers) {
+		/*for (User exstUsers : allUsers) {
 			if (exstUsers.getEmail().equals(user.getEmail())) {
-				throw new CreateNewUserException("Email is being used");
+				throw new CreateNewUserException("Email is being used");  função menos eficiente
 			}
+		}*/
+		if(repository.existsByEmail(user.getEmail()) != true){
+			throw new CreateNewUserException("Email is being used");
+		}
+		Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(user.getEmail());
+		if (matcher.matches()!= true) {
+			throw new ValidationException("Email invalido");
 		}
 	}
 
@@ -107,4 +119,5 @@ public class UserService {
 		}
 		return cryptoService.matches(senha,user.getPassword());
 	}
+
 }

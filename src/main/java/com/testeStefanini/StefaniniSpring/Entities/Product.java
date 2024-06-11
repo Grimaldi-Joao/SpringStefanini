@@ -28,7 +28,7 @@ public class Product implements Serializable {
 
     private String name;
     private String description;
-    private Double price;
+    private Double price;// Preço BigDecimal
     private String imgUrl;
 
     //@Transient essa anotation faz com que o jpa não tente rodar oq vc queira

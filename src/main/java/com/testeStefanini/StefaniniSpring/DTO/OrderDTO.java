@@ -16,7 +16,7 @@ public class OrderDTO {
         this.moment = moment;
         this.orderStatus = orderStatus;
         this.clientName = clientName;
-        this.total = total;
+        
     }
 
     public Long getId() {

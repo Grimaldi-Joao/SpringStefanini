@@ -63,7 +63,7 @@ public class UserService {
          * use esse codigo para imprimir o erro no terminal e descobri como trata-lo
          */
 
-    public User update(Long id, User obj) {
+    public User update(Long id, User obj) {//não ter campo vazio sendo att
 		try {
 			User entity = repository.getReferenceById(id);
 			validUser(obj);
@@ -75,9 +75,15 @@ public class UserService {
 	}
 
     private void updateData(User entity, User obj) { //atualização de usuario
-		entity.setName(obj.getName());
-		entity.setEmail(obj.getEmail());
-		entity.setPhone(obj.getPhone());
+		if (obj.getName() != null) {
+			entity.setName(obj.getName());
+		}
+		if (obj.getEmail() != null) {
+			entity.setEmail(obj.getEmail());
+		}
+		if (obj.getPhone() != null) {
+			entity.setPhone(obj.getPhone());
+		}
 	}
 
 	private void validUser(User user){

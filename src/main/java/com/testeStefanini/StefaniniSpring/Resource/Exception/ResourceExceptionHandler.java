@@ -18,41 +18,22 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ResourceExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)//essa anotatio dará para a excessão que estamos interceptando(a qual está dentro dos parenteses), o tratamento que estamos implementando a baixo 
 	public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) {
-		String error = "Resource not found";//mensagem para o usuario
 		HttpStatus status = HttpStatus.NOT_FOUND;//como esse erro é de não encontrar o ID aqui estamos usando o 404 not faund
-		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());// criamos um standart erro para altera-lo com nossas novas informações
+		StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(),e.getEnum(), request.getRequestURI());// criamos um standart erro para altera-lo com nossas novas informações
 		return ResponseEntity.status(status).body(err);
 	}
 	
 	@ExceptionHandler(DatabaseException.class)
 	public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
-		String error = "Database error";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
-		return ResponseEntity.status(status).body(err);
-	}
-	
-	@ExceptionHandler(ValidationException.class)
-    public ResponseEntity<StandardError> validation(ValidationException e, HttpServletRequest request) {
-        String error = "Validation error";
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
-    }
-
-	@ExceptionHandler(CreateNewUserException.class)
-	public ResponseEntity<StandardError> newUser(CreateNewUserException e, HttpServletRequest request){
-		String error = "New user error";
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), e.getEnum(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
 
-	@ExceptionHandler(PasswordException.class)
-	public ResponseEntity<StandardError> creatPass(PasswordException e, HttpServletRequest request){
-		String error = "The password doesn't 8 or more characters long";
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+	@ExceptionHandler({ValidationException.class, CreateNewUserException.class, PasswordException.class})
+	public ResponseEntity<StandardError> Invalid(ValidationException e, HttpServletRequest request) {
+		HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+		StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), e.getEnum(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
 }

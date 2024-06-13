@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.testeStefanini.StefaniniSpring.Entities.User;
 import com.testeStefanini.StefaniniSpring.Repository.UserRepository;
+import com.testeStefanini.StefaniniSpring.Resource.Exception.Enum.ExceptionEnum;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.CreateNewUserException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.DatabaseException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.PasswordException;
@@ -37,7 +38,7 @@ public class UserService {
 
 	public User findById(Long id) {
 		Optional<User> obj = repository.findById(id);
-		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id,ExceptionEnum.Resource_not_found));
 	}
 
     public User insert(User obj) {//inseriri um novo objeto do tipo user
@@ -51,9 +52,9 @@ public class UserService {
 		try {
 			repository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new ResourceNotFoundException(id);
+			throw new ResourceNotFoundException(id, ExceptionEnum.Resource_not_found);
 		} catch (DataIntegrityViolationException e) {
-			throw new DatabaseException(e.getMessage());//aqui é uma excessão da minha camada de serviço
+			throw new DatabaseException(e.getMessage(), ExceptionEnum.Database_error);//aqui é uma excessão da minha camada de serviço
 		}
 	}
         /*
@@ -70,7 +71,7 @@ public class UserService {
 			updateData(entity, obj);
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {
-			throw new ResourceNotFoundException(id);
+			throw new ResourceNotFoundException(id,ExceptionEnum.Validation_error);
 		}	
 	}
 
@@ -88,10 +89,10 @@ public class UserService {
 
 	private void validUser(User user){
         if (user.getEmail() == null || user.getEmail().isEmpty()) {
-            throw new ValidationException("Email is required");
+            throw new ValidationException("Email is required",ExceptionEnum.Validation_error);
         }
         if (user.getPhone() == null || user.getPhone().isEmpty()) {
-            throw new ValidationException("Phone number is required");
+            throw new ValidationException("Phone number is required", ExceptionEnum.Validation_error);
         }
 	}
 
@@ -102,18 +103,18 @@ public class UserService {
 			}
 		}*/
 		if(repository.existsByEmail(user.getEmail()) != false){
-			throw new CreateNewUserException("Email is being used");
+			throw new CreateNewUserException("Email is being used", ExceptionEnum.New_user_error);
 		}
 		Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher matcher = pattern.matcher(user.getEmail());
 		if (matcher.matches()!= true) {
-			throw new ValidationException("Email invalido");
+			throw new ValidationException("Email invalido", ExceptionEnum.Validation_error);
 		}
 	}
 
 	private void checkPas(User user){
 		if (user.getPassword().length() <= 8) {
-			throw new PasswordException("Password is invalid");
+			throw new PasswordException("Password is invalid",ExceptionEnum.password_invalid);
 		}
 	}
 

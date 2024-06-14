@@ -44,7 +44,7 @@ public class StandardError implements Serializable { //essa classe serve para su
 		this.status = status;
 	}
 
-	public String getmessage() {
+	public String getMessage() {
 		return message;
 	}
 

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
+import com.testeStefanini.StefaniniSpring.Service.exceptions.BaseExeptionInvalid;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.CreateNewUserException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.DatabaseException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.PasswordException;
@@ -24,16 +25,17 @@ public class ResourceExceptionHandler {
 	}
 	
 	@ExceptionHandler(DatabaseException.class)
-	public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
+	public ResponseEntity<StandardError> database(BaseExeptionInvalid e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
+		System.out.println(e.getMessage());
 		StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), e.getEnum(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
 
 	@ExceptionHandler({ValidationException.class, CreateNewUserException.class, PasswordException.class})
-	public ResponseEntity<StandardError> Invalid(ValidationException e, HttpServletRequest request) {
+	public ResponseEntity<StandardError> Invalid(BaseExeptionInvalid e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
-		StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), e.getEnum(), request.getRequestURI());
+		StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(),e.getEnum() , request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
 }

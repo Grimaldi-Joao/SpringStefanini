@@ -80,6 +80,7 @@ public class UserService {
 			entity.setName(obj.getName());
 		}
 		if (obj.getEmail() != null) {
+			checkEmail(obj);
 			entity.setEmail(obj.getEmail());
 		}
 		if (obj.getPhone() != null) {
@@ -88,10 +89,13 @@ public class UserService {
 	}
 
 	private void validUser(User user){
-        if (user.getEmail() == null || user.getEmail().isEmpty()) {
+		if (user.getEmail() == null && user.getPhone() == null && user.getName() == null) {
+			throw new ValidationException("You need to fill in the blanks ",ExceptionEnum.Validation_error);
+		}
+        if (user.getEmail().isEmpty()) {
             throw new ValidationException("Email is required",ExceptionEnum.Validation_error);
         }
-        if (user.getPhone() == null || user.getPhone().isEmpty()) {
+        if (user.getPhone().isEmpty()) {
             throw new ValidationException("Phone number is required", ExceptionEnum.Validation_error);
         }
 	}

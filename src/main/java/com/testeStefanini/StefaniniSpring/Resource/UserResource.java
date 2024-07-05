@@ -32,9 +32,9 @@ public class UserResource {// recursos da classe User
     public ResponseEntity<List<UserDTO>> fiandAll(){//responseEntity é um tipo de retorno do spring que retorna respostas de requisições web
         //aqui ele está retornando todos os usuarios
         List<User> list = service.findAll();
-        List<UserDTO> listDTO = list.stream().map(UserDTO::new).collect(Collectors.toList());
+        List<UserDTO> listDtoUsers = list.stream().map(UserDTO::new).collect(Collectors.toList());
         
-        return ResponseEntity.ok().body(listDTO);
+        return ResponseEntity.ok().body(listDtoUsers);
         //ok() é para retornar a resposta com sucesso no http
         //body() retornar o corpo da resposta nesse caso retorna o corpo de u
     }
@@ -43,16 +43,16 @@ public class UserResource {// recursos da classe User
     public ResponseEntity<UserDTO> findById(@PathVariable Long id){//para reconhecer que o id do getmappin é o muesmo da entrada nos usamos o Pathvariable
 
         User objUser = service.findById(id);
-        UserDTO objUserDTO = new UserDTO(objUser);
-        return ResponseEntity.ok().body(objUserDTO);
+        UserDTO objUserDto = new UserDTO(objUser);
+        return ResponseEntity.ok().body(objUserDto);
     }
 
     @PostMapping
-    public ResponseEntity<User> insert(@RequestBody User obj) {//RequestBody serve para desserializar o objeto
-		obj = service.insert(obj);
+    public ResponseEntity<User> insert(@RequestBody User objUser) {//RequestBody serve para desserializar o objeto
+		objUser = service.insert(objUser);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).body(obj);//nos usamos create para retornar 201, é mais apropriado para essa situação
+				.buildAndExpand(objUser.getId()).toUri();
+		return ResponseEntity.created(uri).body(objUser);//nos usamos create para retornar 201, é mais apropriado para essa situação
         //o criate pode um objeto do tipo URI
 	}
 
@@ -63,9 +63,9 @@ public class UserResource {// recursos da classe User
 	}
     
     @PutMapping(value = "/{id}")
-	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj) {//como aqui vc prescisa reconhecer o Id e mexer com os atributos internos do usuario vc usa essas duas anotations
-		obj = service.update(id, obj);
-		return ResponseEntity.ok().body(obj);
+	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User objUser) {//como aqui vc prescisa reconhecer o Id e mexer com os atributos internos do usuario vc usa essas duas anotations
+		objUser = service.update(id, objUser);
+		return ResponseEntity.ok().body(objUser);
 	}
 
     @PostMapping("/login")

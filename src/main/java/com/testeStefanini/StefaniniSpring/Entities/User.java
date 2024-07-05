@@ -3,6 +3,8 @@ package com.testeStefanini.StefaniniSpring.Entities;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ public class User implements Serializable {
     private String name;
     private String email;
     private String phone;
-    @Length(min = 3)
+    @Length(min = 8, message = "the password must not be at least 8 characters long")
     private String password;
 
     @JsonIgnore//Na hora da compilação ele ignora essa parte, ele aqui foi utilizado para parar um Loop que tinha na iteração de User com Order

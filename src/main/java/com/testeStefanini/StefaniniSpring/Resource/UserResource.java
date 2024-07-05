@@ -2,6 +2,7 @@ package com.testeStefanini.StefaniniSpring.Resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.testeStefanini.StefaniniSpring.DTO.UserDTO;
+import com.testeStefanini.StefaniniSpring.DTO.Record.LoginRequestDTO;
 import com.testeStefanini.StefaniniSpring.Entities.User;
 import com.testeStefanini.StefaniniSpring.Service.UserService;
 
@@ -26,21 +29,22 @@ public class UserResource {// recursos da classe User
     private UserService service;
 
     @GetMapping //Para o spring entender que é um metodo get do HTTP tem que usar essa anotation
-    public ResponseEntity<List<User>> fiandAll(){//responseEntity é um tipo de retorno do spring que retorna respostas de requisições web
+    public ResponseEntity<List<UserDTO>> fiandAll(){//responseEntity é um tipo de retorno do spring que retorna respostas de requisições web
         //aqui ele está retornando todos os usuarios
         List<User> list = service.findAll();
+        List<UserDTO> listDTO = list.stream().map(UserDTO::new).collect(Collectors.toList());
         
-        
-        return ResponseEntity.ok().body(list);
+        return ResponseEntity.ok().body(listDTO);
         //ok() é para retornar a resposta com sucesso no http
         //body() retornar o corpo da resposta nesse caso retorna o corpo de u
     }
 
     @GetMapping(value = {"/{id}"})//retornando os usuarios pelo id
-    public ResponseEntity<User> findById(@PathVariable Long id){//para reconhecer que o id do getmappin é o muesmo da entrada nos usamos o Pathvariable
+    public ResponseEntity<UserDTO> findById(@PathVariable Long id){//para reconhecer que o id do getmappin é o muesmo da entrada nos usamos o Pathvariable
 
-        User obj = service.findById(id);
-        return ResponseEntity.ok().body(obj);
+        User objUser = service.findById(id);
+        UserDTO objUserDTO = new UserDTO(objUser);
+        return ResponseEntity.ok().body(objUserDTO);
     }
 
     @PostMapping
@@ -65,15 +69,14 @@ public class UserResource {// recursos da classe User
 	}
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
-        boolean success = service.login(user.getEmail(), user.getPassword());
-        if (success) {
-            return ResponseEntity.ok("Login successful");
-        } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
-
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+    boolean success = service.login(loginRequestDTO.email(), loginRequestDTO.password());
+    if (success) {
+        return ResponseEntity.ok("Login successful");
+    } else {
+        return ResponseEntity.status(401).body("Invalid credentials");
     }
+}
 }
 
 

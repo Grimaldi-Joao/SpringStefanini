@@ -33,8 +33,8 @@ public class ProductResource {// recursos da classe Product
     @GetMapping(value = {"/{id}"})
     public ResponseEntity<Product> findById(@PathVariable Long id){//para reconhecer que o id do getmappin é o muesmo da entrada nos usamos o Pathvariable
 
-        Product obj = service.findById(id);
-        return ResponseEntity.ok().body(obj);
+        Product objProduct = service.findById(id);
+        return ResponseEntity.ok().body(objProduct);
     }
     
 }

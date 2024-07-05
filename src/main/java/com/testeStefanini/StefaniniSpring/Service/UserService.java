@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -41,11 +42,11 @@ public class UserService {
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id,ExceptionEnum.Resource_not_found));
 	}
 
-    public User insert(User obj) {//inseriri um novo objeto do tipo user
-		checkEmail(obj);
-		checkPas(obj);
-		obj.setPassword(CryptoService.encryptPassword(obj.getPassword()));
-		return repository.save(obj);
+    public User insert(User objUser) {//inseriri um novo objeto do tipo user
+		checkEmail(objUser);
+		checkPas(objUser);
+		objUser.setPassword(CryptoService.encryptPassword(objUser.getPassword()));
+		return repository.save(objUser);
 	}
 
 	public void delete(Long id) {
@@ -64,32 +65,32 @@ public class UserService {
          * use esse codigo para imprimir o erro no terminal e descobri como trata-lo
          */
 
-    public User update(Long id, User obj) {//não ter campo vazio sendo att
+    public User update(Long id, User objUser) {//não ter campo vazio sendo att
 		try {
 			User entity = repository.getReferenceById(id);
-			validUser(obj);
-			updateData(entity, obj);
+			validUser(objUser);
+			updateData(entity, objUser);
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(id,ExceptionEnum.Validation_error);
 		}	
 	}
 
-    private void updateData(User entity, User obj) { //atualização de usuario
-		if (obj.getName() != null) {
-			entity.setName(obj.getName());
+    private void updateData(User entity, User objUser) { //atualização de usuario
+		if (Objects.nonNull(objUser.getName())) {
+			entity.setName(objUser.getName());
 		}
-		if (obj.getEmail() != null) {
-			checkEmail(obj);
-			entity.setEmail(obj.getEmail());
+		if (Objects.nonNull(objUser.getEmail())) {
+			checkEmail(objUser);
+			entity.setEmail(objUser.getEmail());
 		}
-		if (obj.getPhone() != null) {
-			entity.setPhone(obj.getPhone());
+		if (Objects.nonNull(objUser.getPhone())) {
+			entity.setPhone(objUser.getPhone());
 		}
 	}
 
 	private void validUser(User user){
-		if (user.getEmail() == null && user.getPhone() == null && user.getName() == null) {
+		if (Objects.isNull(user.getEmail()) && Objects.isNull(user.getPhone()) && Objects.isNull(user.getName())) {
 			throw new ValidationException("You need to fill in the blanks ",ExceptionEnum.Validation_error);
 		}
         if (user.getEmail().isEmpty()) {

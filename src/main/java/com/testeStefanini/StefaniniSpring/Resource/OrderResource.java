@@ -38,8 +38,8 @@ public class OrderResource {// recursos da classe Order
 
     @GetMapping(value = {"/{id}"})
     public ResponseEntity<OrderDTO> findById(@PathVariable Long id){//para reconhecer que o id do getmappin é o muesmo da entrada nos usamos o Pathvariable
-        Order obj = service.findById(id);
-        OrderDTO retornDto = new OrderDTO(obj);
+        Order objOrder = service.findById(id);
+        OrderDTO retornDto = new OrderDTO(objOrder);
         return ResponseEntity.ok().body(retornDto);
     }
 

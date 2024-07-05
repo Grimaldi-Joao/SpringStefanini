@@ -1,22 +1,14 @@
-package com.testeStefanini.StefaniniSpring.Entities;
+package com.testeStefanini.StefaniniSpring.DTO;
 
 import java.io.Serializable;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.testeStefanini.StefaniniSpring.Entities.User;
 
-import java.util.ArrayList;
-
-import jakarta.persistence.Entity;//usamos esse pois é sempre melhor a classe depender da especificação
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
-@Entity //isso demonstra que essa classe é uma entidade de um banco de dado, isso pertime converter a entidade para um modelo relacional
-@Table(name ="tb_user")// renomeando o nome da tabela da classe pois User é palavra reservada no banco de dados
-public class User implements Serializable {
+public class UserDTO implements Serializable {
     private static final long serialVersionUID = 1L; //Numero do Serializable
 
     @Id//Chave primaria
@@ -25,30 +17,23 @@ public class User implements Serializable {
     private String name;
     private String email;
     private String phone;
-    @Length(min = 3)
-    private String password;
 
-    @JsonIgnore//Na hora da compilação ele ignora essa parte, ele aqui foi utilizado para parar um Loop que tinha na iteração de User com Order
-                //complementando a ideia de cima, quando se faz uma associação de 1 para muitos voce tem que ussar essa anotatio, pois senão da erro de memoria já que vai está e loop
-
-
-    @OneToMany(mappedBy = "client")//fazendo o outro lado da relação, mostrando que a relação de user com order é de 1 para varias
-    private List<Order> orders = new ArrayList<>();
-
-    public User(Long id,String name, String email, String phone, String password){
+    public UserDTO(Long id,String name, String email, String phone){
         super();
         this.id = id;
         this.email = email;
         this.name = name;
         this.phone = phone;
-        this.password = password;
     }
 
-    public User(){}//Por padrão
-
-    public List<Order> getOrders() {
-        return orders;
+    public UserDTO(User objUser){
+        this.id = objUser.getId();
+        this.name = objUser.getName();
+        this.email = objUser.getEmail();
+        this.phone = objUser.getPhone();
     }
+
+    public UserDTO(){}//Por padrão
 
     public String getEmail() {
         return email;
@@ -59,9 +44,7 @@ public class User implements Serializable {
     public String getName() {
         return name;
     }
-    public String getPassword() {
-        return password;
-    }public String getPhone() {
+    public String getPhone() {
         return phone;
     }
     
@@ -73,9 +56,6 @@ public class User implements Serializable {
     }
     public void setName(String name) {
         this.name = name;
-    }
-    public void setPassword(String password) {
-        this.password = password;
     }
     public void setPhone(String phone) {
         this.phone = phone;
@@ -96,7 +76,7 @@ public class User implements Serializable {
             return false;
         if(getClass() != obj.getClass())
             return false;
-        User other = (User) obj;
+        UserDTO other = (UserDTO) obj;
         if (id == null) {
             if(other.id != null)
                 return false;
@@ -105,7 +85,4 @@ public class User implements Serializable {
         }
         return true;
     }
-
-
-
 }

@@ -33,8 +33,8 @@ public class CategoryResource {// recursos da classe Category
     @GetMapping(value = {"/{id}"})
     public ResponseEntity<Category> findById(@PathVariable Long id){//para reconhecer que o id do getmappin é o muesmo da entrada nos usamos o Pathvariable
 
-        Category obj = service.findById(id);
-        return ResponseEntity.ok().body(obj);
+        Category objCategory = service.findById(id);
+        return ResponseEntity.ok().body(objCategory);
     }
     
 }

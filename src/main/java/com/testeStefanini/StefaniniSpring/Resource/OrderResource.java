@@ -26,12 +26,12 @@ public class OrderResource {// recursos da classe Order
         
         List<Order> list = service.findAll();
 
-        List<OrderDTO> dtoList = list.stream().map(OrderDTO::new).collect(Collectors.toList());
+        List<OrderDTO> dtoListGet = list.stream().map(OrderDTO::new).collect(Collectors.toList());
         //Stream pe uma função faz o processamento em sequencia dos dados da minha lista
         //map aplica uma função especifica para cada elemento da stream,(OrderDTO::new) faz referencia a o contrutor OrderDTO(Order order)
         //collect seleciona todos os elementos da stream,(Collectors.toList()) pega todos os coletaveis e converte ele para uma lista
         
-        return ResponseEntity.ok().body(dtoList);
+        return ResponseEntity.ok().body(dtoListGet);
         //ok() é para retornar a resposta com sucesso no http
         //body() retornar o corpo da resposta nesse caso retorna o corpo de u
     }

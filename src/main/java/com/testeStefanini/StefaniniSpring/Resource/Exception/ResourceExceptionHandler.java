@@ -1,9 +1,14 @@
 package com.testeStefanini.StefaniniSpring.Resource.Exception;
 
 import java.time.Instant;
+
+import com.testeStefanini.StefaniniSpring.Resource.Exception.Enum.*;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import com.testeStefanini.StefaniniSpring.Service.exceptions.BaseExeptionInvalid;
@@ -38,4 +43,15 @@ public class ResourceExceptionHandler {
 		StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(),e.getEnum() , request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationErro> validation(MethodArgumentNotValidException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ValidationErro err = new ValidationErro(Instant.now(), status.value(),ExceptionEnum.Validation_error , "Erro de validação" , request.getRequestURI());
+        for (FieldError f : e.getBindingResult().getFieldErrors()) {
+            err.addError(f.getField(), f.getDefaultMessage());
+        
+    }
+	return ResponseEntity.status(status).body(err);
+}
 }

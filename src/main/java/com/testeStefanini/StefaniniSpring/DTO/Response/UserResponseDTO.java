@@ -1,11 +1,11 @@
-package com.testeStefanini.StefaniniSpring.DTO;
+package com.testeStefanini.StefaniniSpring.DTO.Response;
 
 import java.io.Serializable;
 
 import com.testeStefanini.StefaniniSpring.Entities.User;
 
 
-public class UserDTO implements Serializable {
+public class UserResponseDTO implements Serializable{
     private static final long serialVersionUID = 1L; //Numero do Serializable
 
     private Long id;
@@ -13,22 +13,14 @@ public class UserDTO implements Serializable {
     private String email;
     private String phone;
 
-    public UserDTO(Long id,String name, String email, String phone){
-        super();
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.phone = phone;
-    }
-
-    public UserDTO(User objUser){
+    public UserResponseDTO(User objUser){
         this.id = objUser.getId();
         this.name = objUser.getName();
         this.email = objUser.getEmail();
         this.phone = objUser.getPhone();
     }
 
-    public UserDTO(){}//Por padrão
+    public UserResponseDTO(){}//Por padrão
 
     public String getEmail() {
         return email;
@@ -55,5 +47,4 @@ public class UserDTO implements Serializable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
 }

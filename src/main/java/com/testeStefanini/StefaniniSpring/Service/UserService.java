@@ -16,7 +16,6 @@ import com.testeStefanini.StefaniniSpring.Repository.UserRepository;
 import com.testeStefanini.StefaniniSpring.Resource.Exception.Enum.ExceptionEnum;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.CreateNewUserException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.DatabaseException;
-import com.testeStefanini.StefaniniSpring.Service.exceptions.PasswordException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.ResourceNotFoundException;
 import com.testeStefanini.StefaniniSpring.Service.exceptions.ValidationException;
 
@@ -44,7 +43,6 @@ public class UserService {
 
     public User insert(User objUser) {//inseriri um novo objeto do tipo user
 		checkEmail(objUser);
-		checkPas(objUser);
 		objUser.setPassword(CryptoService.encryptPassword(objUser.getPassword()));
 		return repository.save(objUser);
 	}
@@ -67,25 +65,25 @@ public class UserService {
 
     public User update(Long id, User objUser) {//não ter campo vazio sendo att
 		try {
-			User entity = repository.getReferenceById(id);
+			User entityUpdate = repository.getReferenceById(id);
 			validUser(objUser);
-			updateData(entity, objUser);
-			return repository.save(entity);
+			updateData(entityUpdate, objUser);
+			return repository.save(entityUpdate);
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(id,ExceptionEnum.Validation_error);
 		}	
 	}
 
-    private void updateData(User entity, User objUser) { //atualização de usuario
-		if (Objects.nonNull(objUser.getName())) {
-			entity.setName(objUser.getName());
+    private void updateData(User entityUpdate, User objUser) { //atualização de usuario
+		if (Objects.nonNull(objUser.getName()) && objUser.getName() != "") {
+			entityUpdate.setName(objUser.getName());
 		}
-		if (Objects.nonNull(objUser.getEmail())) {
+		if (Objects.nonNull(objUser.getEmail()) && objUser.getEmail() != "") {
 			checkEmail(objUser);
-			entity.setEmail(objUser.getEmail());
+			entityUpdate.setEmail(objUser.getEmail());
 		}
-		if (Objects.nonNull(objUser.getPhone())) {
-			entity.setPhone(objUser.getPhone());
+		if (Objects.nonNull(objUser.getPhone()) && objUser.getPhone() != "") {
+			entityUpdate.setPhone(objUser.getPhone());
 		}
 	}
 
@@ -93,12 +91,6 @@ public class UserService {
 		if (Objects.isNull(user.getEmail()) && Objects.isNull(user.getPhone()) && Objects.isNull(user.getName())) {
 			throw new ValidationException("You need to fill in the blanks ",ExceptionEnum.Validation_error);
 		}
-        if (user.getEmail().isEmpty()) {
-            throw new ValidationException("Email is required",ExceptionEnum.Validation_error);
-        }
-        if (user.getPhone().isEmpty()) {
-            throw new ValidationException("Phone number is required", ExceptionEnum.Validation_error);
-        }
 	}
 
 	private void checkEmail(User user){
@@ -113,13 +105,7 @@ public class UserService {
 		Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher matcher = pattern.matcher(user.getEmail());
 		if (matcher.matches()!= true) {
-			throw new ValidationException("Email invalido", ExceptionEnum.Validation_error);
-		}
-	}
-
-	private void checkPas(User user){
-		if (user.getPassword().length() <= 8) {
-			throw new PasswordException("Password is invalid",ExceptionEnum.password_invalid);
+			throw new ValidationException("Invalid Email", ExceptionEnum.Validation_error);
 		}
 	}
 

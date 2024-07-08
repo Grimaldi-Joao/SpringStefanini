@@ -17,9 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.testeStefanini.StefaniniSpring.DTO.UserDTO;
+import com.testeStefanini.StefaniniSpring.DTO.UserDTOPost;
+import com.testeStefanini.StefaniniSpring.DTO.UserDtoPut;
 import com.testeStefanini.StefaniniSpring.DTO.Record.LoginRequestDTO;
+import com.testeStefanini.StefaniniSpring.DTO.Response.UserResponseDTO;
 import com.testeStefanini.StefaniniSpring.Entities.User;
 import com.testeStefanini.StefaniniSpring.Service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -43,16 +48,18 @@ public class UserResource {// recursos da classe User
     public ResponseEntity<UserDTO> findById(@PathVariable Long id){//para reconhecer que o id do getmappin é o muesmo da entrada nos usamos o Pathvariable
 
         User objUser = service.findById(id);
-        UserDTO objUserDto = new UserDTO(objUser);
-        return ResponseEntity.ok().body(objUserDto);
+        UserDTO objUserDtoGet = new UserDTO(objUser);
+        return ResponseEntity.ok().body(objUserDtoGet);
     }
 
     @PostMapping
-    public ResponseEntity<User> insert(@RequestBody User objUser) {//RequestBody serve para desserializar o objeto
-		objUser = service.insert(objUser);
+    public ResponseEntity<UserResponseDTO> insert(@Valid @RequestBody UserDTOPost objUserDTOPost) {//RequestBody serve para desserializar o objeto
+        User newUser = new User(null, objUserDTOPost.getName(),objUserDTOPost.getEmail(),objUserDTOPost.getPhone(),objUserDTOPost.getPassword());
+		newUser = service.insert(newUser);
+        UserResponseDTO responseNewUser = new UserResponseDTO(newUser);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(objUser.getId()).toUri();
-		return ResponseEntity.created(uri).body(objUser);//nos usamos create para retornar 201, é mais apropriado para essa situação
+				.buildAndExpand(newUser.getId()).toUri();
+		return ResponseEntity.created(uri).body(responseNewUser);//nos usamos create para retornar 201, é mais apropriado para essa situação
         //o criate pode um objeto do tipo URI
 	}
 
@@ -63,9 +70,11 @@ public class UserResource {// recursos da classe User
 	}
     
     @PutMapping(value = "/{id}")
-	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User objUser) {//como aqui vc prescisa reconhecer o Id e mexer com os atributos internos do usuario vc usa essas duas anotations
-		objUser = service.update(id, objUser);
-		return ResponseEntity.ok().body(objUser);
+	public ResponseEntity<UserResponseDTO> update( @PathVariable Long id,@Valid @RequestBody UserDtoPut objUser) {//como aqui vc prescisa reconhecer o Id e mexer com os atributos internos do usuario vc usa essas duas anotations
+		User newUserPut = new User(id, objUser.getName(), objUser.getEmail(), objUser.getPhone(), null);
+        newUserPut= service.update(id, newUserPut);
+        UserResponseDTO responseNewUserUpdate = new UserResponseDTO(newUserPut); 
+		return ResponseEntity.ok().body(responseNewUserUpdate);
 	}
 
     @PostMapping("/login")
@@ -73,9 +82,8 @@ public class UserResource {// recursos da classe User
     boolean success = service.login(loginRequestDTO.email(), loginRequestDTO.password());
     if (success) {
         return ResponseEntity.ok("Login successful");
-    } else {
-        return ResponseEntity.status(401).body("Invalid credentials");
     }
+    return ResponseEntity.status(401).body("Invalid credentials");
 }
 }
 

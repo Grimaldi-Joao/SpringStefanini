@@ -30,8 +30,7 @@ public class User implements Serializable {
 
     @JsonIgnore//Na hora da compilação ele ignora essa parte, ele aqui foi utilizado para parar um Loop que tinha na iteração de User com Order
                 //complementando a ideia de cima, quando se faz uma associação de 1 para muitos voce tem que ussar essa anotatio, pois senão da erro de memoria já que vai está e loop
-
-
+                
     @OneToMany(mappedBy = "client")//fazendo o outro lado da relação, mostrando que a relação de user com order é de 1 para varias
     private List<Order> orders = new ArrayList<>();
 

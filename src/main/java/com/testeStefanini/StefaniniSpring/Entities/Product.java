@@ -35,7 +35,7 @@ public class Product implements Serializable {
     @ManyToMany
     @JoinTable(name = "tb_product_category", //nome da tabela de associação 
     joinColumns = @JoinColumn(name = "product_id"),//define a chave estrangeira que está recebendo
-    inverseJoinColumns = @JoinColumn(name = "category_id"))// aqui vc está especificando a rela ção de muitos para muitos de Product com category, e esse invertido define a chave estrangeira do outro lado da relação
+    inverseJoinColumns = @JoinColumn(name = "category_id"))// aqui vc está especificando a relação de muitos para muitos de Product com category, e esse invertido define a chave estrangeira do outro lado da relação
     private Set<Category> categories = new HashSet<>();
 
     @OneToMany(mappedBy = "id.product")
